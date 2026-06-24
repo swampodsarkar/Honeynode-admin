@@ -1,6 +1,6 @@
-import { initializeApp, getApps } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database";
+import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
+import { getAuth, type Auth } from "firebase/auth";
+import { getDatabase, type Database } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,10 +13,31 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+let app: FirebaseApp | null = null;
 
-export const auth = getAuth(app);
-export const db = getDatabase(app);
+function getApp(): FirebaseApp {
+  if (app) return app;
+  if (getApps().length > 0) {
+    app = getApps()[0];
+  } else {
+    app = initializeApp(firebaseConfig);
+  }
+  return app;
+}
+
+let _auth: Auth | null = null;
+let _db: Database | null = null;
+
+export function getFirebaseAuth(): Auth {
+  if (!_auth) _auth = getAuth(getApp());
+  return _auth;
+}
+
+export function getFirebaseDb(): Database {
+  if (!_db) _db = getDatabase(getApp());
+  return _db;
+}
+
 export const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "")
   .split(",")
   .map((e) => e.trim())

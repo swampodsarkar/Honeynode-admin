@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { ref, onValue } from "firebase/database";
-import { db } from "@/lib/firebase";
+import { getFirebaseDb } from "@/lib/firebase";
 
 export interface UserProfile {
   username: string;
@@ -38,7 +38,7 @@ export function useAllUsers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const usersRef = ref(db, "users");
+    const usersRef = ref(getFirebaseDb(), "users");
     const unsubscribe = onValue(usersRef, (snapshot) => {
       const data = snapshot.val() || {};
       setUsers(data);

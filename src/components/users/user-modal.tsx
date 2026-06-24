@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { UserData } from "@/lib/use-firebase-db";
 import { ref, update } from "firebase/database";
-import { db } from "@/lib/firebase";
+import { getFirebaseDb } from "@/lib/firebase";
 import { toast } from "sonner";
 import {
   Wifi,
@@ -65,7 +65,7 @@ export function UserModal({ user, uid, open, onOpenChange }: UserModalProps) {
 
     setAdjLoading(true);
     try {
-      const userRef = ref(db, `users/${uid}/profile/credits`);
+      const userRef = ref(getFirebaseDb(), `users/${uid}/profile/credits`);
       const delta = type === "add" ? amount : -amount;
       await update(userRef, { ".sv": null });
 
