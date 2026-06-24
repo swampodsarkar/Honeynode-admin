@@ -25,7 +25,7 @@ export interface UserNode {
 }
 
 export interface UserData {
-  profile: UserProfile;
+  profile?: UserProfile;
   nodes?: Record<string, UserNode>;
 }
 
@@ -65,6 +65,7 @@ export function useAllUsers() {
   }[] = [];
 
   Object.entries(users).forEach(([uid, userData]) => {
+    if (!userData || typeof userData !== "object") return;
     if (userData.nodes) {
       Object.entries(userData.nodes).forEach(([ip, node]) => {
         allNodes.push({

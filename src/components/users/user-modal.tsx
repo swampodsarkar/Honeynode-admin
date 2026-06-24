@@ -56,6 +56,8 @@ export function UserModal({ user, uid, open, onOpenChange }: UserModalProps) {
   const profile = user.profile;
   const nodes = user.nodes ? Object.entries(user.nodes) : [];
 
+  if (!profile) return null;
+
   const handleCreditAdjustment = async (type: "add" | "deduct") => {
     const amount = parseFloat(creditAdj);
     if (isNaN(amount) || amount <= 0) {
